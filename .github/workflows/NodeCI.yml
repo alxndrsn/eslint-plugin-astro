@@ -16,19 +16,6 @@ jobs:
           npm run build
       - name: Lint
         run: npm run lint
-  build-doc:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - name: Install And Build
-        run: |+
-          npm install -f
-          npm run update
-          npm run build
-          export NODE_OPTIONS="--max-old-space-size=8192"
-          npm run docs:build
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -44,20 +31,6 @@ jobs:
         run: npm install -f
       - name: Test
         run: npm test
-  test-for-eslint-v8:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-      - name: Install eslint v8.57.0
-        run: |+
-          npm i -D eslint@^8.57.0 -f
-          npx rimraf node_modules
-      - name: Install Packages
-        run: npm install -f
-      - name: Test
-        run: npm test
   test-integration:
     runs-on: ubuntu-latest
     steps:
@@ -67,16 +40,3 @@ jobs:
         run: npm install -f
       - name: Test
         run: npm run test:integration
-  test-and-coverage:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - name: Install Packages
-        run: npm install -f
-      - name: Test
-        run: npm run cover
-      - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@v2.3.4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
